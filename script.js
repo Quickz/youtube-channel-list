@@ -4,30 +4,6 @@
 	var channelIdInput = document.getElementById("channel-id-input");
 	var addChannelBtn = document.getElementById("add-channel");
 	addChannelBtn.addEventListener("click", addChannel);
-	channelList = [];
-	loadChannelList();
-
-
-	/**
-	 * deletes both the array entry
-	 * and the visible element of it
-	 */
-	function deleteEntry(e)
-	{
-		var container = e.target.parentElement;
-		var containerParent = container.parentElement;
-		var parentChildren = containerParent.children;
-		for (let i = 0; i < parentChildren.length; i++)
-		{
-			if (parentChildren[i] == container)
-			{
-				containerParent.removeChild(container);
-				channelList.splice(i, 1);
-				saveChannelList();
-				return;
-			}
-		}
-	}
 
 	/**
 	 * adds a new channel id to the list
@@ -35,32 +11,7 @@
 	 */
 	function addChannel()
 	{
-		channelList.push(channelIdInput.value);
-		request(channelList[channelList.length - 1]);
-		saveChannelList();
-	}
-
-	/**
-	 * saves the channel list array in string format
-	 * inside local storage
-	 */
-	function saveChannelList()
-	{
-		localStorage.YTchannelList = JSON.stringify(channelList);
-	}
-
-	/**
-	 * loads the channel list from local storage
-	 *
-	 */
-	function loadChannelList()
-	{
-		if (localStorage.YTchannelList)
-		{
-			channelList = JSON.parse(localStorage.YTchannelList);
-			for (let i = 0; i < channelList.length; i++)
-				request(channelList[i]);
-		}
+		//request(channelList[channelList.length - 1]);
 	}
 
 	/**
@@ -90,16 +41,10 @@
 		textnode = document.createTextNode("Subscribers: " + subCount);
 		subCountContainer.appendChild(textnode);
 
-		var deleteBtn = document.createElement("button");
-		textnode = document.createTextNode("Delete");
-		deleteBtn.appendChild(textnode);
-		deleteBtn.addEventListener("click", deleteEntry);
-
 		container.appendChild(img);
 		container.appendChild(nameContainer);
 		container.appendChild(anchor);
 		container.appendChild(subCountContainer);
-		container.appendChild(deleteBtn);
 		entries.appendChild(container);
 	}
 
@@ -107,22 +52,31 @@
 	 * sends a request to the server
 	 * to get the user data
 	 */
-	function request(userID)
+	function request()
 	{
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200)
 		    {
 		    	var data = JSON.parse(this.responseText);
-		    	var name = data.title;
-		    	var channelUrl = "https://www.youtube.com/channel/" + userID;
-		    	var imgUrl = data.avatar;
-		    	createEntry(name, channelUrl, imgUrl, data.subCount);
+		    	
+		    	for (let i = 0; i < data.length; i++)
+		    	{
+			    	let name = data[i].title;
+			    	let channelUrl = "https://www.youtube.com/channel/" +
+			    					 data[i].userId;
+			    	let imgUrl = data[i].avatar;
+			    	let subCount = data[i].subCount;
+			    	createEntry(name, channelUrl, imgUrl, subCount);
+		    	}
 		    }
 		};
-		xhttp.open("POST", "server.php", true);
-		xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		xhttp.send("data=" + userID);
+		xhttp.open("GET", "server.php", true);
+		xhttp.setRequestHeader("Content-Type",
+			"application/x-www-form-urlencoded");
+		xhttp.send();
 	}
+	request();
+
 
 })();

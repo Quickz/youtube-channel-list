@@ -4,19 +4,35 @@ $key = json_decode(
 	file_get_contents("youtubeApiKey.json")
 )->key;
 
-if (isset($_POST["data"]))
-{
-	$userID = htmlspecialchars($_POST["data"]);
-	$url1 = "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=" .
-			$userID . "&key=" . $key;
+$userID = json_decode(
+	file_get_contents("channelList.json")
+)->ids;
 
-	$url2 = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=" .
-			$userID . "&key=" . $key;
+
+$data = [];
+for ($i = 0; $i < sizeOf($userID); $i++)
+{
+	$data[$i] = getUserData($userID[$i], $key);
+}
+
+echo json_encode($data);
+
+
+/**
+ *
+ *
+ */
+function getUserData($userID, $key)
+{
+	$url1 = "https://www.googleapis.com/youtube/v3/channels?" .
+			"part=snippet&id=" . $userID . "&key=" . $key;
+
+	$url2 = "https://www.googleapis.com/youtube/v3/channels?" .
+			"part=statistics&id=" . $userID . "&key=" . $key;
 
 	$data = json_decode(requestdata($url1));
-	
 
-	if (sizeof($data) > 0)
+	if (sizeof($data->items) > 0)
 	{
 		$data = $data->items[0];
 		$result = (object)[];
@@ -24,12 +40,13 @@ if (isset($_POST["data"]))
 		$result->avatar = $data->snippet->thumbnails->default->url;
 
 		$data = json_decode(requestData($url2));
-		if (sizeOf($data) > 0)
+		if (sizeOf($data->items) > 0)
 		{
 			$data = $data->items[0];
 			$result->subCount = $data->statistics->subscriberCount;
+			$result->userId = $userID;
 
-			echo json_encode($result);
+			return $result;
 		}
 	}
 }
@@ -54,11 +71,3 @@ function requestData($url)
 	curl_close($request);
 	return $data;
 }
-
-
-
-
-
-//https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=&key=
-
-//https://www.googleapis.com/youtube/v3/channels?part=statistics&forUsername=pewdiepie&key=AIzaSyB8gUlB_zCraZJ_ShgdRRPB1mSGvI_66JU
