@@ -1,19 +1,7 @@
 (function(){
 
-	var entries = document.getElementById("entries");
-	var channelIdInput = document.getElementById("channel-id-input");
-	var addChannelBtn = document.getElementById("add-channel");
-	addChannelBtn.addEventListener("click", addChannel);
-
-	/**
-	 * adds a new channel id to the list
-	 * and generates a new entry
-	 */
-	function addChannel()
-	{
-		//request(channelList[channelList.length - 1]);
-	}
-
+	request();
+	
 	/**
 	 * creates the html elements
 	 * for a channel entry
@@ -76,7 +64,5 @@
 			"application/x-www-form-urlencoded");
 		xhttp.send();
 	}
-	request();
-
 
 })();
