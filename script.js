@@ -1,39 +1,56 @@
 (function(){
 
+	"use strict";
+
 	request();
-	
+
 	/**
 	 * creates the html elements
 	 * for a channel entry
 	 */
 	function createEntry(name, channelUrl, imageUrl, subCount)
 	{
-		var container = document.createElement("div");
+		var container = createElement("div", entries);
 		container.className = "channel-entry";
 
-		var img = document.createElement("img");
-		img.className = "channel-avatar";
+		var imgContainer = createElement("div", container);
+		imgContainer.className = "channel-avatar";
+
+		var img = createElement("img", imgContainer);
 		img.src = imageUrl;
 
-		var nameContainer = document.createElement("div");
-		var textnode = document.createTextNode(name);
+		var nameContainer = createElement("div", container);
 		nameContainer.className = "channel-name";
-		nameContainer.appendChild(textnode);
 
-		var anchor = document.createElement("a");
+		var anchor = createElement("a", nameContainer);
+		createTextNode(name, anchor);
 		anchor.href = channelUrl;
-		textnode = document.createTextNode("channel url");
-		anchor.appendChild(textnode);
 
-		var subCountContainer = document.createElement("div");
-		textnode = document.createTextNode("Subscribers: " + subCount);
-		subCountContainer.appendChild(textnode);
+		var subCountContainer = createElement("div", container);
+		var subTxtContainer = createElement("div", subCountContainer);
+		createTextNode(subCount, subTxtContainer);
+		subCountContainer.className = "channel-subCount";
+	}
 
-		container.appendChild(img);
-		container.appendChild(nameContainer);
-		container.appendChild(anchor);
-		container.appendChild(subCountContainer);
-		entries.appendChild(container);
+	/**
+	 * creates the specified element
+	 * and assigns it as child of the parent
+	 */
+	function createElement(tagName, parent)
+	{
+		var element = document.createElement(tagName);
+		parent.appendChild(element);
+		return element;
+	}
+
+	/**
+	 * creates a text node
+	 * and adds it to the specified element
+	 */
+	function createTextNode(text, parent)
+	{
+		var textnode = document.createTextNode(text);
+		parent.appendChild(textnode);
 	}
 
 	/**

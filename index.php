@@ -6,7 +6,12 @@
 	<title>YT</title>
 </head>
 <body>
-	<div id="entries"></div>
+	<div id="entries">
+		<div class="channel-top-row">
+			<div>Name</div>
+			<div>Subcribers</div>
+		</div>
+	</div>
 	<script src="script.js"></script>
 </body>
 </html>
