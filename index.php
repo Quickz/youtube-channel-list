@@ -9,7 +9,7 @@
 	<div id="entries">
 		<div class="channel-top-row">
 			<div>Name</div>
-			<div>Subcribers</div>
+			<div>Subscribers</div>
 		</div>
 	</div>
 	<script src="script.js"></script>

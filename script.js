@@ -2,8 +2,10 @@
 
 	"use strict";
 
-	request();
+	var count = 0;
 
+	request();
+	
 	/**
 	 * creates the html elements
 	 * for a channel entry
@@ -12,6 +14,11 @@
 	{
 		var container = createElement("div", entries);
 		container.className = "channel-entry";
+
+		var numberContainer = createElement("div", container);
+		numberContainer.className = "channel-number";
+		createElement("div", numberContainer);
+		createTextNode("#" + ++count, numberContainer);
 
 		var imgContainer = createElement("div", container);
 		imgContainer.className = "channel-avatar";
