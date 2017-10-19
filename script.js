@@ -71,7 +71,7 @@
 		    if (this.readyState == 4 && this.status == 200)
 		    {
 		    	var data = JSON.parse(this.responseText);
-		    	
+		    	data = sortData(data);
 		    	for (let i = 0; i < data.length; i++)
 		    	{
 			    	let name = data[i].title;
@@ -87,6 +87,28 @@
 		xhttp.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded");
 		xhttp.send();
+	}
+
+	/**
+	 * sorts the channels in descending
+	 * order by their subcriber count
+	 * note: +n - converts to number
+	 */
+	function sortData(data)
+	{
+		for (let i = 0; i < data.length; i++)
+    	{
+	    	for (let j = 0; j < data.length - i - 1; j++)
+	    	{
+	    		if (+data[j].subCount < +data[j + 1].subCount)
+	    		{
+	    			let tmp = data[j];
+	    			data[j] = data[j + 1];
+	    			data[j + 1] = tmp;
+	    		}
+	    	}
+    	}
+    	return data;
 	}
 
 })();
