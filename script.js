@@ -111,7 +111,6 @@
     	return data;
 	}
 
-
 	/**
 	 * puts a coma at every
 	 * fourth position in a string
@@ -127,6 +126,5 @@
 
 		return subCount;
 	}
-
 
 })();
