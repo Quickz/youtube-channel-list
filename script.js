@@ -78,7 +78,7 @@
 			    	let channelUrl = "https://www.youtube.com/channel/" +
 			    					 data[i].userId;
 			    	let imgUrl = data[i].avatar;
-			    	let subCount = data[i].subCount;
+			    	let subCount = formatSubCount(data[i].subCount);
 			    	createEntry(name, channelUrl, imgUrl, subCount);
 		    	}
 		    }
@@ -110,5 +110,23 @@
     	}
     	return data;
 	}
+
+
+	/**
+	 * puts a coma at every
+	 * fourth position in a string
+	 */
+	function formatSubCount(subCount)
+	{
+		for (let i = 3; i < subCount.length; i += 4)
+		{
+			let s1 = subCount.substr(0, subCount.length - i);
+			let s2 = subCount.substr(subCount.length - i);
+			subCount = s1 + "," + s2;
+		}
+
+		return subCount;
+	}
+
 
 })();
