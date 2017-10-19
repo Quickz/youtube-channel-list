@@ -5,7 +5,7 @@
 	var count = 0;
 
 	request();
-	
+
 	/**
 	 * creates the html elements
 	 * for a channel entry
@@ -81,6 +81,12 @@
 			    	let subCount = formatSubCount(data[i].subCount);
 			    	createEntry(name, channelUrl, imgUrl, subCount);
 		    	}
+
+		    	// hiding loader and displaying the result
+		    	var loader = document.getElementById("loading");
+		    	loader.parentElement.removeChild(loader);
+		    	var entries = document.getElementById("entries");
+		    	entries.hidden = false;
 		    }
 		};
 		xhttp.open("GET", "server.php", true);

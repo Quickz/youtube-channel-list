@@ -150,3 +150,87 @@
 .channel-name a {
 	color: #333333;
 }
+
+/**
+ * loader css
+ * code
+ */
+#loading {
+	position: fixed;
+	right: 40.5vw;
+	top: calc(50vh - 7.5vw);
+	opacity: 0.8;
+}
+
+.loader {
+	display: inline-block;
+	width: 19vw;
+	height: 15vw;
+	font-size: 0;
+}
+
+.loader div {
+	display: inline-block;
+	background: #e1e1e1;
+	width: 3vw;
+	margin-right: 1vw;
+}
+
+.loader div:nth-child(1) {
+	margin-top: 0vw;
+	height: 6vw;
+	animation: raise1 1.5s ease infinite;
+}
+
+.loader div:nth-child(2) {
+	margin-top: 0vw;
+	height: 15vw;
+	animation: raise2 2.5s ease infinite;
+}
+
+.loader div:nth-child(3) {
+	margin-top: 6vw;
+	height: 9vw;
+	animation: raise3 1s ease infinite;
+}
+
+.loader div:nth-child(4) {
+	margin-top: 0vw;
+	height: 12vw;
+	animation: raise4 1.75s ease infinite;
+}
+
+.loader div:nth-child(5) {
+	margin-top: 0vw;
+	height: 3vw;
+	margin-right: 0;
+	animation: raise5 2.25s ease infinite;
+}
+
+@keyframes raise1 {
+    0%   { height: 6vw;  }
+    15%  { height: 12vw; }
+    50%  { height: 12vw; }
+    65%  { height: 6vw;  }
+}
+
+@keyframes raise2 {
+	0%   { height: 15vw;  }
+    15%  { height: 3vw; }
+    50%  { height: 3vw; }
+    65%  { height: 15vw;  }
+}
+
+@keyframes raise4 {
+	0%   { height: 12vw;  }
+    15%  { height: 6vw; }
+    50%  { height: 6vw; }
+    65%  { height: 12vw;  }
+}
+
+@keyframes raise5 {
+	0%   { height: 3vw;  }
+    15%  { height: 15vw; }
+    50%  { height: 15vw; }
+    65%  { height: 3vw;  }
+}
