@@ -32,6 +32,7 @@
 		var anchor = createElement("a", nameContainer);
 		createTextNode(name, anchor);
 		anchor.href = channelUrl;
+		anchor.target = "_blank";
 
 		var subCountContainer = createElement("div", container);
 		var subTxtContainer = createElement("div", subCountContainer);
