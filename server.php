@@ -8,52 +8,67 @@ $userID = json_decode(
 	file_get_contents("channelList.json")
 )->ids;
 
-
-$data = [];
-for ($i = 0; $i < sizeOf($userID); $i++)
-{
-	$data[$i] = getUserData($userID[$i], $key);
-}
+$data;
+$data = getUserData($userID, $key);
 
 echo json_encode($data);
 
 
 /**
- *
- *
+ * obtains channel data:
+ * id, url, thumbnail, title
  */
 function getUserData($userID, $key)
 {
-	$url1 = "https://www.googleapis.com/youtube/v3/channels?" .
-			"part=snippet&id=" . $userID . "&key=" . $key;
+	$url = "https://www.googleapis.com/youtube/v3/channels?" .
+			"part=snippet,statistics&id=%s&key=%s";
+	$userIdString = $userID[0];
 
-	$url2 = "https://www.googleapis.com/youtube/v3/channels?" .
-			"part=statistics&id=" . $userID . "&key=" . $key;
+	// 50 seems to be the limit of items per request
+	for ($i = 1; $i < sizeof($userID) && $i < 50; $i++)
+		$userIdString .= "," . $userID[$i];
+	
+	// removing stored ids
+	// necessary since youtube has a limit
+	// for the number of requests that can
+	// be sent at once
+	array_splice($userID, 0, $i);
 
-	$data = json_decode(requestdata($url1));
+	// putting in the data in the urls
+	$url = sprintf($url, $userIdString, $key);
 
-	if (sizeof($data->items) > 0)
+	$data = json_decode(requestdata($url));
+
+	$result = [];
+	if (sizeof($data) > 0)
 	{
-		$data = $data->items[0];
-		$result = (object)[];
-		$result->title = $data->snippet->title;
-		$result->avatar = $data->snippet->thumbnails->default->url;
-
-		$data = json_decode(requestData($url2));
-		if (sizeOf($data->items) > 0)
+		$userInfo = $data->items;
+		$lng = sizeof($userInfo);
+		for ($i = 0; $i < $lng; $i++)
 		{
-			$data = $data->items[0];
-			$result->subCount = $data->statistics->subscriberCount;
-			$result->userId = $userID;
-
-			return $result;
+			$result[$i] = (object)[];
+			$result[$i]->userId = $userInfo[$i]->id;
+			$snippet = $userInfo[$i]->snippet;
+			$result[$i]->title = $snippet->title;
+			$result[$i]->avatar = $snippet->thumbnails->default->url;
+			
+			$stats = $userInfo[$i]->statistics;
+			$result[$i]->subCount = $stats->subscriberCount;
 		}
 	}
+
+	// obtaining data for leftover ids
+	if (sizeof($userID) > 0)
+		$restOfResult = getUserData($userID, $key);
+	else
+		$restOfResult = [];
+
+	return array_merge($result, $restOfResult);
 }
 
 /**
- *
- *
+ * obtains a string of data
+ * from a url
  */
 function requestData($url)
 {
